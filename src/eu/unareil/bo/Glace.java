@@ -11,13 +11,13 @@ public class Glace extends ProduitPerissable{
         this.temperatureConservation = temperatureConservation;
     }
 
-    public Glace(String marque, String libelle, long qteStock, float prixUnitaire, LocalDate dateLimiteConso, String parfum, int temperatureConservation) {
+    public Glace(LocalDate dateLimiteConso, String marque, String libelle, int temperatureConservation, String parfum, long qteStock, float prixUnitaire) {
         super(marque, libelle, qteStock, prixUnitaire, dateLimiteConso);
         this.parfum = parfum;
         this.temperatureConservation = temperatureConservation;
     }
 
-    public Glace(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, LocalDate dateLimiteConso, String parfum, int temperatureConservation) {
+    public Glace(LocalDate dateLimiteConso, long refProd, String libelle, String marque, float prixUnitaire, long qteStock , String parfum, int temperatureConservation) {
         super(refProd, libelle, marque, prixUnitaire, qteStock, dateLimiteConso);
         this.parfum = parfum;
         this.temperatureConservation = temperatureConservation;
@@ -37,5 +37,14 @@ public class Glace extends ProduitPerissable{
 
     public void setTemperatureConservation(int temperatureConservation) {
         this.temperatureConservation = temperatureConservation;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", parfum=" + parfum +
+                ", temperatureConservation=" + temperatureConservation +
+                ", date=" + getDateLimiteConso() +
+                ']';
     }
 }

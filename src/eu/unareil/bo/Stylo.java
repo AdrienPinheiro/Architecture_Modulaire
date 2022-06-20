@@ -36,4 +36,12 @@ public class Stylo extends Produit{
     public void setTypeMine(String typeMine) {
         this.typeMine = typeMine;
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                ", couleur=" + couleur +
+                ", typeMine=" + typeMine +
+                ']';
+    }
 }

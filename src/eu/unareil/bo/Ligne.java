@@ -4,16 +4,16 @@ public class Ligne {
     private int quantite;
     private Produit produit;
 
-    public Ligne(int quantite, Produit produit) {
+    public Ligne(Produit produit, int quantite) {
         this.quantite = quantite;
         this.produit = produit;
     }
 
-    public int getQuantite() {
+    public int getQte() {
         return quantite;
     }
 
-    public void setQuantite(int quantite) {
+    public void setQte(int quantite) {
         this.quantite = quantite;
     }
 
@@ -25,11 +25,14 @@ public class Ligne {
         this.produit = produit;
     }
 
+    public double getPrix(){
+        return this.getQte() * produit.getPrixUnitaire();
+    }
+
     @Override
     public String toString() {
-        return "Ligne{" +
-                "quantite= " + quantite +
-                ", produit= " + produit +
-                '}';
+        return  "produit=" + produit +
+                ", qte=" + quantite +
+                ", prix=" + getPrix() + ']';
     }
 }

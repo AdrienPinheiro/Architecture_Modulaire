@@ -64,4 +64,13 @@ public class Produit {
     public void setQteStock(long qteStock) {
         this.qteStock = qteStock;
     }
+
+    @Override
+    public String toString() {
+        return  this.getClass().getSimpleName() + " [" +
+                "libelle=" + libelle +
+                ", marque=" + marque +
+                ", prixUnitaire=" + prixUnitaire + 0 + " euros"+
+                ", qteStock=" + qteStock;
+    }
 }

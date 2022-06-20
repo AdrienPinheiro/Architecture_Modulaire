@@ -1,39 +1,53 @@
 package eu.unareil.bo;
 
+import java.util.List;
+
 public class CartePostale extends Produit{
-    private String type;
-    private Auteur auteur;
+    private TypeCartePostale TypeCartePostale;
+    private List<Auteur> auteurs;
 
-    public CartePostale(String type, Auteur auteur){
-        this.type = type;
-        this.auteur = auteur;
+    public CartePostale(TypeCartePostale type, List<Auteur> auteurs){
+        this.TypeCartePostale = type;
+        this.auteurs = auteurs;
     }
 
-    public CartePostale(String marque, String libelle, long qteStock, float prixUnitaire, String type, Auteur auteur) {
+    public CartePostale(String marque, String libelle, long qteStock, float prixUnitaire, List<Auteur> auteurs, TypeCartePostale type) {
         super(marque, libelle, qteStock, prixUnitaire);
-        this.type = type;
-        this.auteur = auteur;
+        this.TypeCartePostale = type;
+        this.auteurs = auteurs;
     }
 
-    public CartePostale(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, String type, Auteur auteur) {
+    public CartePostale(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, List<Auteur> auteurs, TypeCartePostale type) {
         super(refProd, libelle, marque, prixUnitaire, qteStock);
-        this.type = type;
-        this.auteur = auteur;
+        this.TypeCartePostale = type;
+        this.auteurs = auteurs;
     }
 
-    public String getType() {
-        return type;
+    public TypeCartePostale getType() {
+        return TypeCartePostale;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(TypeCartePostale type) {
+        this.TypeCartePostale = type;
     }
 
-    public Auteur getAuteur() {
-        return auteur;
+    public List<Auteur> getAuteur() {
+        return auteurs;
     }
 
-    public void setAuteur(Auteur auteur) {
-        this.auteur = auteur;
+    public void setAuteur(List<Auteur> auteurs) {
+        this.auteurs = auteurs;
     }
-}
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(super.toString()).append(", TypeCartePostale=").append(TypeCartePostale);
+        for (Auteur auteur: auteurs) {
+            sb.append(", auteur(s)=").append(" auteur").append((auteurs.indexOf(auteur))+1).append("= ");
+            sb.append(auteur.getNom()).append(" ").append(auteur.getPrenom()).append(", type=").append(getType());
+        }
+        sb.append(']');
+        return sb.toString();
+        };
+    }

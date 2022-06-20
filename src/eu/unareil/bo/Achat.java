@@ -1,18 +1,21 @@
 package eu.unareil.bo;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Achat{
 
     private double montant;
-    private List<Ligne> lignes = new ArrayList<>();
-    private Ligne ligne;
+    private List<Ligne> lignesAchat = new ArrayList<>();
 
-    public Achat(double montant, List<Ligne> lignes, Ligne ligne) {
+    public Achat(Ligne ligne) {
+        this.lignesAchat.add(ligne);
+    }
+
+    public Achat(double montant, List<Ligne> lignes) {
         this.montant = montant;
-        this.lignes = lignes;
-        this.ligne = ligne;
+        this.lignesAchat = lignes;
     }
 
     public double getMontant() {
@@ -24,50 +27,48 @@ public class Achat{
     }
 
     public List<Ligne> getLignes() {
-        return lignes;
+        return lignesAchat;
     }
 
     public void setLignes(List<Ligne> lignes) {
-        this.lignes = lignes;
+        this.lignesAchat = lignes;
     }
 
-    public Ligne getLigne() {
-        return ligne;
+    public Ligne getLigne(int index) {
+        return lignesAchat.get(index);
     }
 
-    public void ajouteLigne(Ligne ligne) {
-        this.ligne = ligne;
+    public void ajouteLigne(Produit prod, int qte) {
+        Ligne newLigne = new Ligne(prod, qte);
+        this.lignesAchat.add(newLigne);
     }
 
-    public void mofifieLigne(int index, int nouvelleQte){
-        for(int i = 0; i<getLignes().size(); i++){
-            if(i == index){
-                getLignes().get(index).setQuantite(nouvelleQte);
-            }
-        }
+    public void modifieLigne(int index, int nouvelleQte){
+        lignesAchat.get(index).setQte(nouvelleQte);
     }
 
     public void supprimeLigne(int index){
-        for(int i = 0; i<getLignes().size(); i++){
-            if(i == index){
-                getLignes().remove(index);
-            }
-        }
+        lignesAchat.remove(index);
     }
 
     public double calculMontant(){
-        for(Ligne ligne : lignes){
-            montant += ligne.getProduit().getPrixUnitaire() * ligne.getQuantite();
+        montant = 0;
+        for(Ligne ligne : lignesAchat){
+            montant += ligne.getProduit().getPrixUnitaire() * ligne.getQte();
         }
         return montant;
     }
 
     @Override
     public String toString() {
-        return "Achat{" +
-                "montant= " + montant +
-                ", lignes= " + lignes +
-                ", ligne= " + ligne +
-                '}';
+        final StringBuffer sb = new StringBuffer("Achat :").append("\n");
+        DecimalFormat deciFormat = new DecimalFormat("#0.00");
+        for(Ligne ligne : lignesAchat){
+            sb.append("ligne ").append((lignesAchat.indexOf(ligne))+1).append("  Ligne[");
+            sb.append(ligne.toString()).append("\n");
+        }
+        sb.append("\n");
+        sb.append("Total de l'achat : ").append(deciFormat.format(calculMontant())).append(" euros");
+        return sb.toString();
     }
 }
