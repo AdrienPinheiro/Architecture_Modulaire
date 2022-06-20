@@ -70,7 +70,7 @@ public class Produit {
         return  this.getClass().getSimpleName() + " [" +
                 "libelle=" + libelle +
                 ", marque=" + marque +
-                ", prixUnitaire=" + prixUnitaire + 0 + " euros"+
+                ", prixUnitaire=" + prixUnitaire + " euros"+
                 ", qteStock=" + qteStock;
     }
 }
