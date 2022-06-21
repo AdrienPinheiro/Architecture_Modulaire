@@ -10,7 +10,7 @@ public class Auteur {
         this.nom = nom;
     }
 
-    public Auteur(String prenom, String nom, long refAuteur) {
+    public Auteur(long refAuteur, String prenom, String nom) {
         this.prenom = prenom;
         this.nom = nom;
         this.refAuteur = refAuteur;
@@ -38,5 +38,15 @@ public class Auteur {
 
     public void setRefAuteur(long refAuteur) {
         this.refAuteur = refAuteur;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Auteur{");
+        sb.append("prenom='").append(prenom).append('\'');
+        sb.append(", nom='").append(nom).append('\'');
+        sb.append(", refAuteur=").append(refAuteur);
+        sb.append('}');
+        return sb.toString();
     }
 }
