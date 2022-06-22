@@ -16,7 +16,7 @@ public class Pain extends ProduitPerissable{
     }
 
     public Pain(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, int poid) {
-        super(refProd, libelle, marque, prixUnitaire, qteStock, LocalDate.now());
+        super(refProd, libelle, marque, prixUnitaire, qteStock, LocalDate.now().plusDays(2));
         this.poid = poid;
     }
 
