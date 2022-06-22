@@ -17,11 +17,17 @@ public class CartePostale extends Produit{
         this.auteurs = auteurs;
     }
 
+    public CartePostale(String marque, String libelle, long qteStock, float prixUnitaire, TypeCartePostale typeCartePostale) {
+        super(marque, libelle, qteStock, prixUnitaire);
+        TypeCartePostale = typeCartePostale;
+    }
+
     public CartePostale(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, List<Auteur> auteurs, TypeCartePostale type) {
         super(refProd, libelle, marque, prixUnitaire, qteStock);
         this.TypeCartePostale = type;
         this.auteurs = auteurs;
     }
+
 
     public TypeCartePostale getType() {
         return TypeCartePostale;
@@ -42,12 +48,12 @@ public class CartePostale extends Produit{
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(super.toString()).append(", TypeCartePostale=").append(TypeCartePostale);
+        sb.append(super.toString()).append(", auteur(s)=");
         for (Auteur auteur: auteurs) {
-            sb.append(", auteur(s)=").append(" auteur").append((auteurs.indexOf(auteur))+1).append("= ");
-            sb.append(auteur.getNom()).append(" ").append(auteur.getPrenom()).append(", type=").append(getType());
+            sb.append(" auteur").append((auteurs.indexOf(auteur))+1).append("= ");
+            sb.append(auteur.getNom()).append(" ").append(auteur.getPrenom());
         }
-        sb.append(']');
+        sb.append(", type=").append(getType()).append(']');
         return sb.toString();
         };
     }

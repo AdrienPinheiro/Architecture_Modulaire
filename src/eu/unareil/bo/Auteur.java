@@ -1,8 +1,13 @@
 package eu.unareil.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Auteur {
     private String prenom;
     private String nom;
+
+    private List<CartePostale> lesCartes = new ArrayList<>();
 
     private long refAuteur;
     public Auteur(String prenom, String nom) {
@@ -14,6 +19,21 @@ public class Auteur {
         this.prenom = prenom;
         this.nom = nom;
         this.refAuteur = refAuteur;
+    }
+
+    public Auteur(long refAuteur, String prenom, String nom, List<CartePostale> lesCartes) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.lesCartes = lesCartes;
+        this.refAuteur = refAuteur;
+    }
+
+    public List<CartePostale> getLesCartes() {
+        return lesCartes;
+    }
+
+    public void setLesCartes(List<CartePostale> lesCartes) {
+        this.lesCartes = lesCartes;
     }
 
     public String getPrenom() {
@@ -46,6 +66,7 @@ public class Auteur {
         sb.append("prenom='").append(prenom).append('\'');
         sb.append(", nom='").append(nom).append('\'');
         sb.append(", refAuteur=").append(refAuteur);
+        sb.append(", lesCartes=").append(lesCartes);
         sb.append('}');
         return sb.toString();
     }

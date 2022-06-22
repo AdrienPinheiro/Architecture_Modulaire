@@ -1,6 +1,8 @@
 package eu.unareil.dal.jbdc;
 
 import eu.unareil.bo.Auteur;
+import eu.unareil.bo.CartePostale;
+import eu.unareil.bo.TypeCartePostale;
 import eu.unareil.dal.DALException;
 import eu.unareil.dal.DAO;
 
@@ -12,9 +14,10 @@ public class AuteurJBDCImpl implements DAO<Auteur> {
     private static final String SQL_INSERT="INSERT INTO auteurs (name, lastname) VALUES(?,?)";
     private static final String SQL_UPDATE="UPDATE auteurs SET name=?, lastname=? WHERE id=?";
     private static final String SQL_DELETE="DELETE FROM auteurs WHERE id=?";
-    private static final String SQL_SELECT_BY_ID="SELECT * FROM auteurs WHERE id=?";
-    private static final String SQL_SELECT_ALL="SELECT * FROM auteurs";
+    private static final String SQL_SELECT_BY_ID="SELECT a.id, a.lastname, a.name, GROUP_CONCAT(p.refProd, ',', p.libelle, ',',p.marque, ',', p.qteStock, ',', p.prixUnitaire, ',',p.typeCartePostale) AS produits FROM auteurs a, carteauteur ca, produits p WHERE a.id = ca.refAuteur AND ca.refCartePostale = p.refProd AND a.id=?";
+    private static final String SQL_SELECT_ALL="SELECT a.id, a.lastname, a.name, GROUP_CONCAT(p.refProd, ',', p.libelle, ',',p.marque, ',', p.qteStock, ',', p.prixUnitaire, ',',p.typeCartePostale) AS produits FROM auteurs a, carteauteur ca, produits p WHERE a.id = ca.refAuteur AND ca.refCartePostale = p.refProd GROUP BY a.id";
 
+    private static final String SQL_SELECT_ALL_AUTHOR="SELECT * FROM auteurs";
     @Override
     public void insert(Auteur data) throws DALException {
         try(Connection cnx = JBDCTools.getConnection(); PreparedStatement pstmt = cnx.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)){
@@ -63,29 +66,72 @@ public class AuteurJBDCImpl implements DAO<Auteur> {
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
             if(rs.next()){
+                List<CartePostale> cartePostalesList = new ArrayList<>();
+                String[] cartePostaleList = rs.getString("produits").split(",");
+                TypeCartePostale enumVal = TypeCartePostale.valueOf(cartePostaleList[5]);
+                CartePostale newCartePostale = new CartePostale(cartePostaleList[1], cartePostaleList[2], Long.parseLong(cartePostaleList[3]),
+                        Float.parseFloat(cartePostaleList[4]), enumVal);
+                cartePostalesList.add(newCartePostale);
+
                 return new Auteur(rs.getLong(1), rs.getString(2), rs.getString(3));
             }
         } catch (SQLException e) {
-            throw new DALException("Erreur lors de la recherche de l'auteur - id"+id, e.getCause());
+            e.printStackTrace();
         }
         return null;
     }
 
     @Override
     public List<Auteur> selectAll() throws DALException {
-        ResultSet rs;
-        List<Auteur> auteurs = new ArrayList<>();
-        long id = 0;
-        try(Connection cnx = JBDCTools.getConnection(); Statement stmt = cnx.createStatement();){
-            rs = stmt.executeQuery(SQL_SELECT_ALL);
-            while (rs.next()){
+        List<Auteur> auteursList = new ArrayList<>();
+        try(Connection cnx = JBDCTools.getConnection(); Statement stmt = cnx.createStatement(); Statement stmt2 = cnx.createStatement()){
+            ResultSet rs = stmt.executeQuery(SQL_SELECT_ALL);
+            ResultSet rs2 = stmt2.executeQuery(SQL_SELECT_ALL_AUTHOR);
+
+            if(rs.next()) {
+                rs.next();
+
+                List<CartePostale> cartePostalesList = new ArrayList<>();
+                String[] cartePostales = rs.getString("produits").split(",");
+                TypeCartePostale enumVal = TypeCartePostale.valueOf(cartePostales[5]);
+                CartePostale newCartePostale = new CartePostale(cartePostales[1], cartePostales[2], Long.parseLong(cartePostales[3]),
+                        Float.parseFloat(cartePostales[4]), enumVal);
+                cartePostalesList.add(newCartePostale);
+
                 Auteur auteur = new Auteur(rs.getLong(1), rs.getString(2), rs.getString(3));
-                id = auteur.getRefAuteur();
-                auteurs.add(auteur);
+                auteursList.add(auteur);
+
+                ArrayList<Long> idAuteurs = new ArrayList<>();
+                ;
+                idAuteurs.add(auteur.getRefAuteur());
+
+                do {
+                    for (Auteur auteurId : auteursList) {
+                        idAuteurs.add(auteurId.getRefAuteur());
+                    }
+                    if (auteur.getRefAuteur() != rs.getLong(1) && !idAuteurs.contains(rs.getLong(1))) {
+                        List<CartePostale> newCartePostaleList = new ArrayList<>();
+                        String[] cartePostaleList = rs.getString("produits").split(",");
+                        enumVal = TypeCartePostale.valueOf(cartePostales[5]);
+                        newCartePostale = new CartePostale(cartePostaleList[1], cartePostaleList[2], Long.parseLong(cartePostaleList[3]),
+                                Float.parseFloat(cartePostaleList[4]), enumVal);
+                        newCartePostaleList.add(newCartePostale);
+                        auteur = new Auteur(rs.getLong(1), rs.getString(2), rs.getString(3));
+                        auteursList.add(auteur);
+                    }
+                } while (rs.next());
             }
+            if(rs2.next()){
+                while (rs2.next()){
+                    Auteur auteur = new Auteur(rs2.getLong(1), rs2.getString(2), rs2.getString(3));
+                    auteursList.add(auteur);
+                }
+            }
+
+            return auteursList;
         } catch (SQLException e){
-            throw new DALException("Erreur lors de la récupération de tous les auteurs", e.getCause());
+            e.printStackTrace();
         }
-        return auteurs;
+        return null;
     }
 }

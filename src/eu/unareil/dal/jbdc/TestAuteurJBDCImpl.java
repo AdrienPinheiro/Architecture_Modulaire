@@ -23,8 +23,8 @@ public class TestAuteurJBDCImpl {
                 }
                 System.out.println("--------------------------------------");
                 System.out.println("Dernier auteur créé :");
-                int lastIndex = auteurList.size() -1;
-                Auteur lastAuteur = auteurList.get(lastIndex);
+                int index = auteurList.size()-1;
+                Auteur lastAuteur = auteurList.get(index);
                 System.out.println(lastAuteur);
 
                 System.out.println("--------------------------------------");
@@ -48,8 +48,8 @@ public class TestAuteurJBDCImpl {
                 }
 
                 System.out.println("--------------------------------------");
-                System.out.println("Selection d'un auteur par un id : 15");
-                Auteur auteurById = auteurJbdc.selectById(15);
+                System.out.println("Selection d'un auteur par un id : 76");
+                Auteur auteurById = auteurJbdc.selectById(76);
                 System.out.println(auteurById);
                 System.out.println("--------------------------------------");
             }
