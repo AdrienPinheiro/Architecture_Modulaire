@@ -22,12 +22,17 @@ public class CartePostale extends Produit{
         TypeCartePostale = typeCartePostale;
     }
 
+    public CartePostale(String marque, String libelle, long qteStock, float prixUnitaire, eu.unareil.bo.TypeCartePostale typeCartePostale, List<Auteur> auteurs) {
+        super(marque, libelle, qteStock, prixUnitaire);
+        TypeCartePostale = typeCartePostale;
+        this.auteurs = auteurs;
+    }
+
     public CartePostale(long refProd, String libelle, String marque, float prixUnitaire, long qteStock, List<Auteur> auteurs, TypeCartePostale type) {
         super(refProd, libelle, marque, prixUnitaire, qteStock);
         this.TypeCartePostale = type;
         this.auteurs = auteurs;
     }
-
 
     public TypeCartePostale getType() {
         return TypeCartePostale;
@@ -53,7 +58,7 @@ public class CartePostale extends Produit{
             sb.append(" auteur").append((auteurs.indexOf(auteur))+1).append("= ");
             sb.append(auteur.getNom()).append(" ").append(auteur.getPrenom());
         }
-        sb.append(", type=").append(getType()).append(']');
+        sb.append(", type de carte portale=").append(getType()).append(']');
         return sb.toString();
         };
     }
